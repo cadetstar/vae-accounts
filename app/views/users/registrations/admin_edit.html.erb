@@ -1,0 +1,28 @@
+<div class="user_signup">
+  <%= form_for(@user, :url => admin_update_path(:id => @user.id)) do |f| %>
+      <div><%= f.label :email %><br />
+        <%= f.email_field :email %></div>
+
+      <div><%= f.label :password %><br />
+        <%= f.password_field :password %></div>
+
+      <div><%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation %></div>
+
+      <div><%= f.label :first_name %><br />
+        <%= f.text_field :first_name %></div>
+
+      <div><%= f.label :last_name %><br />
+        <%= f.text_field :last_name %></div>
+
+      <div><%= f.label :roles %><br />
+        <% User::ROLES.each do |role| %>
+            <%= check_box_tag "user[roles][]", role, resource.has_role?(role) %> <%= role.humanize %><br />
+        <% end %>
+        <%= hidden_field_tag "user[roles][]", "" %>
+      </div>
+
+      <div><%= f.submit "Update User" %></div>
+  <% end %>
+
+</div>
