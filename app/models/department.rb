@@ -4,6 +4,20 @@ class Department < ActiveRecord::Base
   belongs_to :supervisor, :class_name => 'User'
 
   before_save :set_supervisor
+  after_save :update_remotes
+
+  def update_remotes
+    require 'net/http'
+    require 'uri'
+
+    ['http://localhost:3001/'].each do |host|
+      uri = URI.parse(host + 'start_query')
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
+
+      response = http.request(request)
+    end
+  end
 
   def self.list_for_select(exclusion = nil)
     Department.where("COALESCE(name, '') != ''").collect{|d| [d, d.id]}

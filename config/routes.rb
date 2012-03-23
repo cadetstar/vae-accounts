@@ -6,8 +6,10 @@ VaeAccounts::Application.routes.draw do
     get 'users/edit/admin', :to => "users/registrations#admin_edit", :as => "admin_edit"
   end
 
-
   match 'users', :to => 'users/registrations#index', :as => 'users'
+  match 'return_to', :to => 'application#set_return_to'
+  match 'passkey/validate', :to => 'application#validate_passkey'
+  match 'departments/remote', :to => 'departments#remote_request'
 
   resources :departments, :only => [:new, :index, :edit, :update, :destroy]
   root :to => 'departments#index'
