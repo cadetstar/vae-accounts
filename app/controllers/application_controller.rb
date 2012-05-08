@@ -36,4 +36,9 @@ class ApplicationController < ActionController::Base
       redirect_to new_user_session_path
     end
   end
+
+  def central_sign_out
+    sign_out
+    redirect_to root_path
+  end
 end

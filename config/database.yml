@@ -4,10 +4,10 @@ development:
   reconnect: false
   database: vae-accounts_development
   pool: 5
-  username: root
-  password: projecte
+  username: postgres
+  password: postgres
   host: localhost
-  port: 5435
+  port: 5432
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -18,10 +18,10 @@ test:
   reconnect: false
   database: vae-accounts_test
   pool: 5
-  username: root
-  password: projecte
+  username: postgres
+  password: postgres
   host: localhost
-  port: 5435
+  port: 5432
 
 production:
   adapter: postgresql
@@ -29,7 +29,7 @@ production:
   reconnect: false
   database: vae-accounts_production
   pool: 5
-  username: root
-  password: projecte
+  username: postgres
+  password: postgres
   host: localhost
-  port: 5435
+  port: 5432

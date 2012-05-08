@@ -58,3 +58,4 @@ VaeAccounts::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 end
+$remotes_to_update = ['http://192.168.10.52/']
