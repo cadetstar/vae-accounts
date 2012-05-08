@@ -10,7 +10,7 @@ class Department < ActiveRecord::Base
     require 'net/http'
     require 'uri'
 
-    ['http://localhost:3001/'].each do |host|
+    $remotes_to_update.each do |host|
       uri = URI.parse(host + 'start_query')
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Get.new(uri.request_uri)

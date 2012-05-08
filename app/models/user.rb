@@ -11,7 +11,9 @@ class User < ActiveRecord::Base
   ROLES = %w(survey_administrator survey_email_administrator careers_administrator careers_hr_administrator accounts_administrator)
 
   def self.bounce_authentication(username, crypted_password)
-    user = User.find_for_authentication(:email => username)
+    unless user = User.find_for_authentication(:email => username)
+      return nil
+    end
     password = crypted_password
     user.valid_password?(password) ? user : nil
   end

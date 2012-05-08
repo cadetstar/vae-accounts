@@ -13,4 +13,6 @@ VaeAccounts::Application.routes.draw do
 
   resources :departments, :only => [:new, :index, :edit, :update, :destroy]
   root :to => 'departments#index'
+
+  match 'sign_out', :to => 'application#central_sign_out'
 end

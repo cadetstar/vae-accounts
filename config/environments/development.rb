@@ -29,3 +29,5 @@ VaeAccounts::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 end
+
+$remotes_to_update = ['http://localhost:3001/']

@@ -7,7 +7,11 @@ class ApplicationController < ActionController::Base
     if !user_signed_in? and user = User.bounce_authentication(params[:username], params[:password])
       sign_in(:user, user)
     end
-    redirect_to session[:user_return_to] + "?user=#{current_user.id}&key=#{current_user.encoded_passkey}"
+    if current_user
+      redirect_to session[:user_return_to] + "?user=#{current_user.id}&key=#{current_user.encoded_passkey}"
+    else
+      redirect_to session[:user_return_to]
+    end
   end
 
   def validate_passkey
@@ -31,5 +35,10 @@ class ApplicationController < ActionController::Base
     unless user_signed_in? and current_user.has_role?('accounts_administrator')
       redirect_to new_user_session_path
     end
+  end
+
+  def central_sign_out
+    sign_out
+    redirect_to root_path
   end
 end
