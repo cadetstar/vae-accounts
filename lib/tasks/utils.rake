@@ -44,7 +44,9 @@ task :import_data => :environment do
     end
     data[k] = YAML.load(parseables[k].join(""))
   end
-
+  puts data.inspect
+  puts parseables.inspect
+  return
   data.keys.each do |k|
     local_name = k.split(".")[1]
     klass = TABLEMAPPER[local_name][:model]
