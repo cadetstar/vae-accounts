@@ -4,9 +4,16 @@ class ApplicationController < ActionController::Base
 
   def set_return_to
     session[:user_return_to] = params[:return_to]
-    if !user_signed_in? and user = User.bounce_authentication(params[:username], params[:password])
-      sign_in(:user, user)
+    if params[:type] == 'sign_in'
+      if !user_signed_in? and user = User.bounce_authentication(params[:username], params[:password])
+        sign_in(:user, user)
+      end
+    else
+      holder = session[:user_return_to]
+      sign_out
+      session[:user_return_to] = holder
     end
+
     if current_user
       redirect_to session[:user_return_to] + "?user=#{current_user.id}&key=#{current_user.encoded_passkey}"
     else

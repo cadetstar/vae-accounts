@@ -1,5 +1,6 @@
 desc "Imports data from a YAML in the lib/tasks/data directory"
 task :import_data => :environment do
+  ENV['BULK_UPDATE'] = '1'
   TABLEMAPPER = {
       'departments' => {
           :model => Department,
@@ -45,26 +46,32 @@ task :import_data => :environment do
     data[k] = YAML.load(parseables[k].join(""))
   end
   puts data.inspect
-  puts parseables.inspect
-  return
+  #puts parseables.inspect
   data.keys.each do |k|
     local_name = k.split(".")[1]
-    klass = TABLEMAPPER[local_name][:model]
-    case local_name
-      when 'appquestions'
-      else
-        data[k].each do |line|
-          item = klass.find_or_create_by_id(line['id'])
-          klass.columns.each do |c|
-            next if c.name == 'id'
-            if c.sql_type == 'boolean'
-              item.send("#{c.name}=", line[TABLEMAPPER[local_name][:fields][c.name] || c.name] == 1)
-            else
-              item.send("#{c.name}=", line[TABLEMAPPER[local_name][:fields][c.name] || c.name])
+    if TABLEMAPPER[local_name]
+      klass = TABLEMAPPER[local_name][:model]
+      case local_name
+        when 'appquestions'
+        else
+          data[k].each do |line|
+            puts "Trying to load: #{line}"
+            item = klass.find_or_create_by_id(line['id'])
+            klass.columns.each do |c|
+              next if c.name == 'id'
+              if c.name == 'encrypted_password'
+                item.send("password=", 'vaecorp')
+              else
+                if c.sql_type == 'boolean'
+                  item.send("#{c.name}=", line[TABLEMAPPER[local_name][:fields][c.name] || c.name] == 1)
+                else
+                  item.send("#{c.name}=", line[TABLEMAPPER[local_name][:fields][c.name] || c.name])
+                end
+              end
             end
+            item.save
           end
-          item.save
-        end
+      end
     end
   end
   User.all.each do |u|
@@ -73,4 +80,6 @@ task :import_data => :environment do
     u.inactive = !u.inactive
     u.save
   end
+  ENV['BULK_UPDATE'] = '0'
+  Department.first.update_remotes
 end

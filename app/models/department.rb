@@ -7,6 +7,8 @@ class Department < ActiveRecord::Base
   after_save :update_remotes
 
   def update_remotes
+    return if ENV['BULK_UPDATE'] == '1'
+
     require 'net/http'
     require 'uri'
 
