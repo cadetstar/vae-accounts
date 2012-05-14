@@ -6,3 +6,4 @@ tmp/
 .idea
 .idea/*
 db/schema.rb
+lib/tasks/data/*
