@@ -29,51 +29,54 @@ task :import_data => :environment do
   end
 
   f = File.open(files.first)
-  lines = f.readlines
+  line = ''
 
-  parseables = {}
-  data = {}
+  until f.eof?
+    line = f.gets until line.match(/^#/)
+    k = line.chomp.gsub(/^# /, '')
+    line = f.gets
 
-  lines.shift until lines[0].match(/^#/)
-
-  until lines.empty?
-    k = lines[0].chomp.gsub(/^# /, '')
-    lines.shift
-    parseables[k] = []
-    until lines.empty? or lines[0].match(/^#/)
-      parseables[k] << lines.shift
+    parseable = []
+    until f.eof? or line.match(/^#/)
+      parseable << line
+      line = f.gets
     end
-    data[k] = YAML.load(parseables[k].join(""))
-  end
-  puts data.inspect
-  #puts parseables.inspect
-  data.keys.each do |k|
+
+    puts parseable.size
+
     local_name = k.split(".")[1]
     if TABLEMAPPER[local_name]
+      data = YAML.load(parseable.join(""))
+#    puts data.inspect
+      puts data.size
+
       klass = TABLEMAPPER[local_name][:model]
       case local_name
         when 'appquestions'
         else
-          data[k].each do |line|
-            puts "Trying to load: #{line}"
-            item = klass.find_or_create_by_id(line['id'])
+          data.each do |entry|
+            puts entry.inspect
+            item = klass.find_or_create_by_id(entry['id'].to_i)
             klass.columns.each do |c|
               next if c.name == 'id'
-              if c.name == 'encrypted_password'
-                item.send("password=", 'vaecorp')
+              if c.sql_type == 'boolean'
+                item.send("#{c.name}=", entry[TABLEMAPPER[local_name][:fields][c.name] || c.name] == 1)
               else
-                if c.sql_type == 'boolean'
-                  item.send("#{c.name}=", line[TABLEMAPPER[local_name][:fields][c.name] || c.name] == 1)
-                else
-                  item.send("#{c.name}=", line[TABLEMAPPER[local_name][:fields][c.name] || c.name])
-                end
+                item.send("#{c.name}=", entry[TABLEMAPPER[local_name][:fields][c.name] || c.name])
               end
+            end
+            if klass == User
+              item.password = 'vaecorp'
+              item.password_confirmation = 'vaecorp'
             end
             item.save
           end
       end
+    else
+      puts "Not processing #{local_name} as it is not mapped."
     end
   end
+
   User.all.each do |u|
     u.password = 'vaecorp'
     u.password_confirmation = 'vaecorp'
@@ -81,5 +84,7 @@ task :import_data => :environment do
     u.save
   end
   ENV['BULK_UPDATE'] = '0'
-  Department.first.update_remotes
+  if (d = Department.first)
+    d.update_remotes
+  end
 end
