@@ -11,7 +11,7 @@ class DepartmentsController < ApplicationController
       key = private_key.private_decrypt(Base64.decode64(params[:key].to_s.gsub(' ','+')))
       if key.to_i == Time.now.at_beginning_of_day.to_i
         k = {}
-        k[:departments] = Department.where("code is not null and code != ''").all.collect{|d| [d.code, d.name, d.city, d.state, d.supervising_department.try(:code), d.manager.try(:email), d.supervisor.try(:email)]}
+        k[:departments] = Department.where("code is not null and code != ''").all.collect{|d| [d.code, d.name, d.city, d.state, d.supervising_department.try(:code), d.manager.try(:email), d.supervisor.try(:email), d.classification, d.short_name]}
         k[:users] = User.all.collect{|u| u.attributes_for_remote}
         # Put in user_departments here eventually
         render :text => k.to_json

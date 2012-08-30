@@ -1,6 +1,7 @@
 <div class="department_form">
   <%= form_for @department do |f| %>
       <div><%= f.label :name %><br /><%= f.text_field :name %></div>
+      <div><%= f.label :short_name %><br /><%= f.text_field :short_name %></div>
       <div><%= f.label :code %><br /><%= f.text_field :code %></div>
       <div><%= f.label :city %><br /><%= f.text_field :city %></div>
       <div><%= f.label :state %><br /><%= f.select :state, grouped_options_for_select(VaeStaticData::STATES) %></div>
