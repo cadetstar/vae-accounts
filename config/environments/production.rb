@@ -58,4 +58,4 @@ VaeAccounts::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 end
-$remotes_to_update = ['http://careers2.vaecorp.com']
+$remotes_to_update = ['http://careers2.vaecorp.com/']

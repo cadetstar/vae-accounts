@@ -8,7 +8,15 @@ class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :remember_me
   attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :remember_me, :roles, :roles_mask, :as => :administrator
 
+  after_save :call_department_for_updates
+
   ROLES = %w(survey_administrator survey_email_administrator careers_administrator careers_hr_administrator accounts_administrator)
+
+  def call_department_for_updates
+    puts 'Testing'
+    ENV['BULK_UPDATE'] = '0'
+    Department.first.try(:update_remotes)
+  end
 
   def self.bounce_authentication(username, crypted_password)
     unless user = User.find_for_authentication(:email => username)
