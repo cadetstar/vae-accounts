@@ -8,6 +8,7 @@
     <th>Manager</th>
     <th>Supervisor</th>
     <th>Supervising Department</th>
+    <th>Classification</th>
     <th>Commands</th>
   </tr>
   <% @departments.each do |d| %>
@@ -20,6 +21,7 @@
         <td><%= d.manager %></td>
         <td><%= d.supervisor %></td>
         <td><%= d.supervising_department %></td>
+        <td><%= d.classification %></td>
         <td><%= link_to 'Edit', edit_department_path(d) %> &middot; <%= link_to 'Destroy', d, :method => "delete", :confirm => 'Are you sure?' %></td>
       </tr>
   <% end %>
