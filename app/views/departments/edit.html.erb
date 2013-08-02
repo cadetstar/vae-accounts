@@ -4,7 +4,7 @@
       <div><%= f.label :short_name %><br /><%= f.text_field :short_name %></div>
       <div><%= f.label :code %><br /><%= f.text_field :code %></div>
       <div><%= f.label :city %><br /><%= f.text_field :city %></div>
-      <div><%= f.label :state %><br /><%= f.select :state, grouped_options_for_select(VaeStaticData::STATES) %></div>
+      <div><%= f.label :state %><br /><%= f.select :state, grouped_options_for_select(VaeStaticData::STATES, @department.state) %></div>
       <div><%= f.label :manager_id, "Manager" %><br /><%= f.select :manager_id, User.list_for_select %></div>
       <div><%= f.label :supervising_department_id, "Supervising Department" %><br /><%= f.select :supervising_department_id, Department.list_for_select(@department) %></div>
 

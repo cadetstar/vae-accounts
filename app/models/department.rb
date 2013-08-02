@@ -23,7 +23,7 @@ class Department < ActiveRecord::Base
   end
 
   def self.list_for_select(exclusion = nil)
-    Department.where("COALESCE(name, '') != ''").collect{|d| [d, d.id]}
+    Department.order(:name).where("COALESCE(name, '') != ''").collect{|d| [d, d.id]}
   end
 
   def set_supervisor

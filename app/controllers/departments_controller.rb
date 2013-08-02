@@ -16,10 +16,11 @@ class DepartmentsController < ApplicationController
         # Put in user_departments here eventually
         render :text => k.to_json
       else
+logger.info 'daymismatch'
         render :text => ''
       end
     rescue Exception => e
-      puts e.backtrace
+      logger.info e.backtrace
       render :text => ''
     end
   end
