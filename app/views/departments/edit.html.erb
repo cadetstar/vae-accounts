@@ -7,6 +7,7 @@
       <div><%= f.label :state %><br /><%= f.select :state, grouped_options_for_select(VaeStaticData::STATES) %></div>
       <div><%= f.label :manager_id, "Manager" %><br /><%= f.select :manager_id, User.list_for_select %></div>
       <div><%= f.label :supervising_department_id, "Supervising Department" %><br /><%= f.select :supervising_department_id, Department.list_for_select(@department) %></div>
+      <div><%= f.label :classification %><br /><%= f.select :classification, VaeStaticData::CLASSIFICATIONS %></div>
 
       <div><%= f.submit 'Update Department' %></div>
   <% end %>
