@@ -50,4 +50,6 @@ module VaeStaticData
 
   STATES = YAML::load_file(File.join(Rails.root, 'lib', 'states.yaml'))
 
+  CLASSIFICATIONS = %w(CONVENTIONS HOTELS CORPORATE CONFERENCE\ SYSTEMS)
+
 end
